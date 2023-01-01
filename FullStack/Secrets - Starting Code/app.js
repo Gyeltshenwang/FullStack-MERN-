@@ -33,8 +33,11 @@ mongoose.connect(url, function () {
 // user Schema 
 
 const userSchema = new mongoose.Schema({
+    name:String,
     email: String,
     password: String,
+    role:String,
+   
 });
 // used to hash and salt the password
 userSchema.plugin(passportLocalMongoose);
@@ -78,10 +81,11 @@ app.get("/logout", function (req, res) {
 // post
 app.post('/register', (req, res) => {
    
-    User.register({ username: req.body.username }, req.body.password, function (err, user) {
+    User.register({ username: req.body.username,role:req.body.role }, req.body.password, function (err, user) {
         if (err) {
             console.log(err);
-            res.redirect('/register')
+           // res.redirect('/register')
+            res.status(200).json({message:'registered',data:User})
         }
         else {
             passport.authenticate('local')(req, res, function () {
